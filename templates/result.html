@@ -2,33 +2,101 @@
 
 {% block content %}
 
-<section class="d-flex align-items-center justify-content-center" style="min-height: 90vh; padding: 2rem;">
-    <div class="text-center w-100" style="max-width: 680px;">
+<div style="max-width: 900px; margin: 0 auto; padding: 2rem 1rem;">
 
-        <h2 style="font-weight: 700; color: #a78bfa;">Analysis Received ⚡</h2>
+    <!-- Header -->
+    <div style="margin-bottom: 2rem;">
+        <a href="/" style="color: #a78bfa; text-decoration: none; font-size: 0.9rem;">← Analyze another idea</a>
+        <h1 style="font-size: 2rem; font-weight: 700; margin-top: 1rem;">Analysis Report</h1>
+        <p style="color: #aaa; margin-top: 0.5rem;">{{ analysis.idea }}</p>
+        <span style="background: #1e1b4b; color: #a78bfa; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem;">
+            {{ analysis.status }}
+        </span>
+        {% if analysis.industry %}
+        <span style="background: #1a1a1a; color: #aaa; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; margin-left: 8px;">
+            {{ analysis.industry }}
+        </span>
+        {% endif %}
+    </div>
 
-        <p style="color: #aaa; margin-top: 1rem;">Your idea has been saved. Agents will run soon.</p>
+    {% if analysis.status == 'completed' and analysis.result %}
 
-        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 2rem; margin-top: 2rem; text-align: left;">
-            <p style="color: #aaa; font-size: 0.85rem; margin-bottom: 6px;">Idea submitted:</p>
-            <p style="color: #f0f0f0; font-size: 1.1rem;">{{ analysis.idea }}</p>
+    <!-- Reviewer Summary Card (shown first) -->
+    <div style="background: #1a1a1a; border: 1px solid #7c3aed; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+            <span style="font-size: 1.2rem;">🔎</span>
+            <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0; color: #a78bfa;">Reviewer Summary</h2>
+        </div>
+        <p style="color: #ddd; white-space: pre-line; line-height: 1.7;">{{ result.reviewer }}</p>
+    </div>
 
-            {% if analysis.industry %}
-            <p style="color: #aaa; font-size: 0.85rem; margin-top: 1rem; margin-bottom: 6px;">Industry:</p>
-            <p style="color: #f0f0f0;">{{ analysis.industry }}</p>
-            {% endif %}
+    <!-- Grid: Competitor + Sentiment -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
 
-            <p style="color: #aaa; font-size: 0.85rem; margin-top: 1rem; margin-bottom: 6px;">Status:</p>
-            <span style="background: #1e1b4b; color: #a78bfa; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem;">
-                {{ analysis.status }}
-            </span>
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+                <span style="font-size: 1.2rem;">📊</span>
+                <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Competitors</h2>
+            </div>
+            <p style="color: #ddd; white-space: pre-line; line-height: 1.7; font-size: 0.9rem;">{{ result.competitor }}</p>
         </div>
 
-        <a href="/" style="display: inline-block; margin-top: 2rem; color: #a78bfa; text-decoration: none; font-size: 0.9rem;">
-            ← Analyze another idea
-        </a>
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+                <span style="font-size: 1.2rem;">💬</span>
+                <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Market Sentiment</h2>
+            </div>
+            <p style="color: #ddd; white-space: pre-line; line-height: 1.7; font-size: 0.9rem;">{{ result.sentiment }}</p>
+        </div>
 
     </div>
-</section>
+
+    <!-- Grid: Trends + Positioning -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+                <span style="font-size: 1.2rem;">📈</span>
+                <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Market Trends</h2>
+            </div>
+            <p style="color: #ddd; white-space: pre-line; line-height: 1.7; font-size: 0.9rem;">{{ result.trends }}</p>
+        </div>
+
+        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+                <span style="font-size: 1.2rem;">💡</span>
+                <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Positioning</h2>
+            </div>
+            <p style="color: #ddd; white-space: pre-line; line-height: 1.7; font-size: 0.9rem;">{{ result.positioning }}</p>
+        </div>
+
+    </div>
+
+    <!-- Risk Card (full width) -->
+    <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+            <span style="font-size: 1.2rem;"></span>
+            <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Risk Analysis</h2>
+        </div>
+        <p style="color: #ddd; white-space: pre-line; line-height: 1.7; font-size: 0.9rem;">{{ result.risk }}</p>
+    </div>
+
+    {% else %}
+
+    <!-- Pending/Failed State -->
+    <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 3rem; text-align: center;">
+        <p style="color: #aaa; font-size: 1rem;">
+            {% if analysis.status == 'pending' or analysis.status == 'running' %}
+                 Analysis is running... please wait and refresh the page.
+            {% else %}
+                 Analysis failed. Please try again.
+            {% endif %}
+        </p>
+        <a href="/" style="display: inline-block; margin-top: 1rem; color: #a78bfa; text-decoration: none;">← Try again</a>
+    </div>
+
+    {% endif %}
+
+</div>
 
 {% endblock %}
