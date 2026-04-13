@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="d-flex align-items-center justify-content-center" style="min-height: 90vh; padding: 2rem;">
+    <div class="text-center w-100" style="max-width: 600px;">
+
+        <h2 style="font-weight: 700; font-size: 1.8rem; margin-bottom: 0.5rem;">
+            Analyzing your idea ⚡
+        </h2>
+        <p style="color: #aaa; margin-bottom: 2.5rem;">
+            {{ analysis.idea }}
+        </p>
+
+        <!-- Agent Steps -->
+        <div style="text-align: left; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;">
+
+            <div class="agent-step" id="step-1" style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #2a2a2a;">
+                <span class="spinner" id="spinner-1">⏳</span>
+                <span style="color: #ddd;">Running Competitor Agent — searching the web...</span>
+            </div>
+
+            <div class="agent-step" id="step-2" style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #2a2a2a; opacity: 0.4;">
+                <span id="spinner-2">⏳</span>
+                <span style="color: #ddd;">Running Sentiment Agent — finding user opinions...</span>
+            </div>
+
+            <div class="agent-step" id="step-3" style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #2a2a2a; opacity: 0.4;">
+                <span id="spinner-3">⏳</span>
+                <span style="color: #ddd;">Running Trends Agent — fetching Google Trends...</span>
+            </div>
+
+            <div class="agent-step" id="step-4" style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #2a2a2a; opacity: 0.4;">
+                <span id="spinner-4">⏳</span>
+                <span style="color: #ddd;">Running Positioning Agent — building strategy...</span>
+            </div>
+
+            <div class="agent-step" id="step-5" style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #2a2a2a; opacity: 0.4;">
+                <span id="spinner-5">⏳</span>
+                <span style="color: #ddd;">Running Risk Agent — identifying risks...</span>
+            </div>
+
+            <div class="agent-step" id="step-6" style="display: flex; align-items: center; gap: 12px; padding: 12px 0; opacity: 0.4;">
+                <span id="spinner-6">⏳</span>
+                <span style="color: #ddd;">Running Reviewer Agent — critiquing all outputs...</span>
+            </div>
+
+        </div>
+
+        <p style="color: #555; font-size: 0.85rem;">This takes about 45–60 seconds. Please don't close this page.</p>
+
+    </div>
+</section>
+
+<script>
+const analysisId = "{{ analysis.id }}";
+const steps = 6;
+const stepDuration = 8000;
+
+let currentStep = 1;
+
+function activateStep(step) {
+    for (let i = 1; i <= steps; i++) {
+        const el = document.getElementById(`step-${i}`);
+        const spinner = document.getElementById(`spinner-${i}`);
+        if (i < step) {
+            el.style.opacity = '1';
+            spinner.textContent = '✅';
+        } else if (i === step) {
+            el.style.opacity = '1';
+            spinner.textContent = '⏳';
+        } else {
+            el.style.opacity = '0.4';
+            spinner.textContent = '⏳';
+        }
+    }
+}
+
+function checkStatus() {
+    fetch(`/status/${analysisId}/`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'completed') {
+                for (let i = 1; i <= steps; i++) {
+                    document.getElementById(`step-${i}`).style.opacity = '1';
+                    document.getElementById(`spinner-${i}`).textContent = '✅';
+                }
+                setTimeout(() => {
+                    window.location.href = `/result/${analysisId}/`;
+                }, 800);
+            } else if (data.status === 'failed') {
+                window.location.href = `/result/${analysisId}/`;
+            } else {
+                if (currentStep < steps) {
+                    currentStep++;
+                    activateStep(currentStep);
+                }
+                setTimeout(checkStatus, stepDuration);
+            }
+        })
+        .catch(() => {
+            setTimeout(checkStatus, stepDuration);
+        });
+}
+
+activateStep(1);
+setTimeout(checkStatus, stepDuration);
+</script>
+
+{% endblock %}
