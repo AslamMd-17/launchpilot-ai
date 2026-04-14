@@ -3,44 +3,40 @@
 {% block content %}
 
 <section class="d-flex align-items-center justify-content-center" style="min-height: 90vh; padding: 2rem;">
-    <div class="text-center w-100" style="max-width: 680px;">
+    <div class="text-center w-100" style="max-width: 660px;">
 
-        <span style="background: #1e1b4b; color: #a78bfa; padding: 6px 16px; border-radius: 999px; font-size: 0.8rem; letter-spacing: 0.05em;">
-            AI-Powered Startup Validation
-        </span>
+        <span class="badge-purple">AI-Powered Startup Validation</span>
 
-        <h1 style="font-size: 3rem; font-weight: 700; margin-top: 1.5rem; line-height: 1.2;">
+        <h1 style="font-size: 2.8rem; font-weight: 700; margin-top: 1.5rem; line-height: 1.2; letter-spacing: -0.03em;">
             Validate your idea <br>
             <span style="color: #a78bfa;">before you build</span>
         </h1>
 
-        <p style="color: #aaa; font-size: 1.1rem; margin: 1.2rem 0 2.5rem;">
-            6 AI agents analyze your startup idea — competitors, sentiment, trends, positioning, risks, and a full review.
+        <p style="color: #666; font-size: 1rem; margin: 1.2rem 0 2.5rem; line-height: 1.7;">
+            6 AI agents analyze your startup — competitors, sentiment,<br>trends, positioning, risks, and a full
+            critical review.
         </p>
 
         <form method="POST" action="/">
             {% csrf_token %}
 
-            <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 2rem; text-align: left;">
+            <div class="card-dark" style="text-align: left;">
 
-                <label style="font-size: 0.85rem; color: #aaa; margin-bottom: 8px; display: block;">
-                    Describe your startup idea
+                <label
+                    style="font-size: 0.8rem; color: #666; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 0.05em;">
+                    Your startup idea
                 </label>
 
-                <textarea
-                    name="idea"
-                    rows="4"
-                    required
-                    placeholder="e.g. An AI tool that helps freelancers automatically generate invoices and track payments..."
-                    style="width: 100%; background: #111; border: 1px solid #2a2a2a; border-radius: 10px; padding: 14px; color: #f0f0f0; font-size: 1rem; resize: none; outline: none;">
+                <textarea name="idea" rows="4" required
+                    placeholder="e.g. An AI tool that helps freelancers automatically generate invoices and track payments...">
                 </textarea>
 
                 <div style="margin-top: 1rem;">
-                    <label style="font-size: 0.85rem; color: #aaa; margin-bottom: 8px; display: block;">
+                    <label
+                        style="font-size: 0.8rem; color: #666; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 0.05em;">
                         Industry (optional)
                     </label>
-                    <select name="industry"
-                        style="width: 100%; background: #111; border: 1px solid #2a2a2a; border-radius: 10px; padding: 12px; color: #f0f0f0; font-size: 1rem; outline: none;">
+                    <select name="industry">
                         <option value="">Select an industry</option>
                         <option value="saas">SaaS</option>
                         <option value="fintech">Fintech</option>
@@ -52,36 +48,18 @@
                     </select>
                 </div>
 
-                <button type="submit"
-                    style="margin-top: 1.5rem; width: 100%; padding: 14px; background: #7c3aed; border: none; border-radius: 10px; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer;">
+                <button type="submit" class="btn-primary-custom" style="margin-top: 1.5rem;">
                     Analyze My Idea ⚡
                 </button>
 
             </div>
         </form>
 
-        <p style="color: #555; font-size: 0.8rem; margin-top: 1.5rem;">
-            Free to use · Powered by Gemini AI · No signup required
+        <p style="color: #333; font-size: 0.8rem; margin-top: 1.5rem;">
+            Free to use · Powered by Groq AI · 6 specialized agents
         </p>
 
     </div>
 </section>
 
 {% endblock %}
-
-<!-- SECTION_NAME:
-- Point 1
-- Point 2
-- Point 3
-
-SECTION_NAME:
-- Point 1
-- Point 2
-For example the Competitor Agent will always return:
-COMPETITORS:
-- Name: ...
-  Features: ...
-  Pricing: ...
-
-MARKET GAP:
-- ... -->
