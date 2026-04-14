@@ -1,6 +1,6 @@
 from django.db import models
 import ast
-
+import json
 class Analysis(models.Model):
     idea = models.TextField()
     industry = models.CharField(max_length=100, blank=True)
@@ -11,7 +11,7 @@ class Analysis(models.Model):
     def get_result(self):
         if self.result:
             try:
-                return ast.literal_eval(self.result)
+                return json.loads(self.result)
             except:
                 return None
         return None

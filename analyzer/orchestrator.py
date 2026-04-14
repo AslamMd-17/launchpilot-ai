@@ -5,6 +5,7 @@ from analyzer.agents.positioning import positioning_agent
 from analyzer.agents.risk import risk_agent
 from analyzer.agents.reviewer import reviewer_agent
 from analyzer.models import Analysis
+import json
 
 
 def run_agents(analysis_id):
@@ -61,8 +62,7 @@ def run_agents(analysis_id):
             "risk": risk_output,
             "reviewer": reviewer_output
         }
-
-        analysis.result = str(result)
+        analysis.result = json.dumps(result)
         analysis.status = 'completed'
         analysis.save()
 
