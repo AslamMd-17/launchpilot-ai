@@ -2,15 +2,15 @@
 
 {% block content %}
 
-<div style="max-width: 900px; margin: 0 auto; padding: 2rem 1rem;">
+<div style="max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem;">
 
     <!-- Header -->
-    <div style="margin-bottom: 2rem; padding-top: 1rem;">
-        <a href="/history/" style="color: #666; text-decoration: none; font-size: 0.85rem;">← Back to history</a>
-        <h1 style="font-size: 1.8rem; font-weight: 700; margin-top: 1rem; letter-spacing: -0.02em;">
+    <div style="margin-bottom: 2.5rem; padding-top: 1rem;">
+        <a href="/history/" style="color: #555; text-decoration: none; font-size: 0.85rem; letter-spacing: 0.02em;">← Back to history</a>
+        <h1 style="font-size: 1.9rem; font-weight: 700; margin-top: 1.2rem; letter-spacing: -0.03em; color: #f0f0f0;">
             Analysis Report
         </h1>
-        <p style="color: #666; margin-top: 0.5rem; font-size: 0.95rem; line-height: 1.6;">
+        <p style="color: #555; margin-top: 0.5rem; font-size: 0.95rem; line-height: 1.6; max-width: 700px;">
             {{ analysis.idea }}
         </p>
         <div style="display: flex; align-items: center; gap: 8px; margin-top: 0.75rem; flex-wrap: wrap;">
@@ -26,87 +26,136 @@
         </div>
     </div>
 
-    {% if analysis.status == 'completed' and analysis.result %}
+    {% if analysis.status == 'completed' and result %}
 
-    <!-- Reviewer Summary Card (shown first) -->
-    <div
-        style="background: #1a1a1a; border: 1px solid #7c3aed; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-            <span style="font-size: 1.2rem;">🔎</span>
-            <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0; color: #a78bfa;">Reviewer Summary</h2>
+    <!-- Overall Verdict Card -->
+    {% with reviewer=result.reviewer %}
+    {% if 'Strong Idea' in reviewer %}
+        {% with verdict="Strong Idea" verdict_color="#4ade80" verdict_bg="#052e16" verdict_border="#166534" verdict_icon="🚀" %}
+        <div style="background: {{ verdict_bg }}; border: 1px solid {{ verdict_border }}; border-radius: 16px; padding: 1.75rem 2rem; margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 1.25rem;">
+            <span style="font-size: 2rem; line-height: 1;">{{ verdict_icon }}</span>
+            <div>
+                <p style="font-size: 0.75rem; color: #4ade80; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Overall Verdict</p>
+                <h2 style="font-size: 1.4rem; font-weight: 700; color: #4ade80; margin: 0 0 0.5rem;">{{ verdict }}</h2>
+                <p style="color: #86efac; font-size: 0.9rem; line-height: 1.6; margin: 0;">This idea has strong fundamentals. Recommended to proceed with an MVP.</p>
+            </div>
         </div>
-        <p style="color: #ddd; white-space: pre-line; line-height: 1.7;">{{ result.reviewer }}</p>
+        {% endwith %}
+    {% elif 'Promising Idea' in reviewer %}
+        <div style="background: #1e1b4b; border: 1px solid #4338ca; border-radius: 16px; padding: 1.75rem 2rem; margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 1.25rem;">
+            <span style="font-size: 2rem; line-height: 1;">💡</span>
+            <div>
+                <p style="font-size: 0.75rem; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Overall Verdict</p>
+                <h2 style="font-size: 1.4rem; font-weight: 700; color: #a78bfa; margin: 0 0 0.5rem;">Promising Idea</h2>
+                <p style="color: #c4b5fd; font-size: 0.9rem; line-height: 1.6; margin: 0;">This idea shows promise. Consider building a lean MVP to validate key assumptions.</p>
+            </div>
+        </div>
+    {% elif 'Needs Work' in reviewer %}
+        <div style="background: #1c1208; border: 1px solid #92400e; border-radius: 16px; padding: 1.75rem 2rem; margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 1.25rem;">
+            <span style="font-size: 2rem; line-height: 1;">🔧</span>
+            <div>
+                <p style="font-size: 0.75rem; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Overall Verdict</p>
+                <h2 style="font-size: 1.4rem; font-weight: 700; color: #fbbf24; margin: 0 0 0.5rem;">Needs Work</h2>
+                <p style="color: #fcd34d; font-size: 0.9rem; line-height: 1.6; margin: 0;">This idea needs refinement before building. Address the gaps identified below first.</p>
+            </div>
+        </div>
+    {% else %}
+        <div style="background: #1a0a0a; border: 1px solid #991b1b; border-radius: 16px; padding: 1.75rem 2rem; margin-bottom: 2rem; display: flex; align-items: flex-start; gap: 1.25rem;">
+            <span style="font-size: 2rem; line-height: 1;">⚠️</span>
+            <div>
+                <p style="font-size: 0.75rem; color: #f87171; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px;">Overall Verdict</p>
+                <h2 style="font-size: 1.4rem; font-weight: 700; color: #f87171; margin: 0 0 0.5rem;">High Risk</h2>
+                <p style="color: #fca5a5; font-size: 0.9rem; line-height: 1.6; margin: 0;">Significant risks identified. Validate core assumptions before investing time or money.</p>
+            </div>
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Reviewer Summary Card -->
+    <div style="background: #111; border: 1px solid #2a2a2a; border-left: 3px solid #7c3aed; border-radius: 16px; padding: 1.75rem 2rem; margin-bottom: 2rem;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem;">
+            <span style="font-size: 1.1rem;">🔎</span>
+            <h2 style="font-size: 1rem; font-weight: 600; margin: 0; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.05em;">Reviewer Summary</h2>
+        </div>
+        <p style="color: #ccc; white-space: pre-line; line-height: 1.8; font-size: 0.9rem; margin: 0;">{{ result.reviewer }}</p>
     </div>
 
-    <!-- Grid: Competitor + Sentiment -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+    <!-- Section Label -->
+    <p style="font-size: 0.75rem; color: #444; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem;">Research Breakdown</p>
 
-        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 1.5rem;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-                <span style="font-size: 1.2rem;">📊</span>
-                <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Competitors</h2>
+    <!-- Grid: Competitor + Sentiment -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+
+        <div style="background: #111; border: 1px solid #1f1f1f; border-radius: 16px; padding: 1.5rem 1.75rem;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem;">
+                <span style="font-size: 1rem;">📊</span>
+                <h2 style="font-size: 0.85rem; font-weight: 600; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">Competitors</h2>
             </div>
-            <p style="color: #ddd; white-space: pre-line; line-height: 1.7; font-size: 0.9rem;">{{ result.competitor }}
-            </p>
+            <p style="color: #ccc; white-space: pre-line; line-height: 1.8; font-size: 0.88rem; margin: 0;">{{ result.competitor }}</p>
         </div>
 
-        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 1.5rem;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-                <span style="font-size: 1.2rem;">💬</span>
-                <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Market Sentiment</h2>
+        <div style="background: #111; border: 1px solid #1f1f1f; border-radius: 16px; padding: 1.5rem 1.75rem;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem;">
+                <span style="font-size: 1rem;">💬</span>
+                <h2 style="font-size: 0.85rem; font-weight: 600; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">Market Sentiment</h2>
             </div>
-            <p style="color: #ddd; white-space: pre-line; line-height: 1.7; font-size: 0.9rem;">{{ result.sentiment }}
-            </p>
+            <p style="color: #ccc; white-space: pre-line; line-height: 1.8; font-size: 0.88rem; margin: 0;">{{ result.sentiment }}</p>
         </div>
 
     </div>
 
     <!-- Grid: Trends + Positioning -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
 
-        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 1.5rem;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-                <span style="font-size: 1.2rem;">📈</span>
-                <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Market Trends</h2>
+        <div style="background: #111; border: 1px solid #1f1f1f; border-radius: 16px; padding: 1.5rem 1.75rem;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem;">
+                <span style="font-size: 1rem;">📈</span>
+                <h2 style="font-size: 0.85rem; font-weight: 600; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">Market Trends</h2>
             </div>
-            <p style="color: #ddd; white-space: pre-line; line-height: 1.7; font-size: 0.9rem;">{{ result.trends }}</p>
+            <p style="color: #ccc; white-space: pre-line; line-height: 1.8; font-size: 0.88rem; margin: 0;">{{ result.trends }}</p>
         </div>
 
-        <div style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 1.5rem;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-                <span style="font-size: 1.2rem;">💡</span>
-                <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Positioning</h2>
+        <div style="background: #111; border: 1px solid #1f1f1f; border-radius: 16px; padding: 1.5rem 1.75rem;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem;">
+                <span style="font-size: 1rem;">💡</span>
+                <h2 style="font-size: 0.85rem; font-weight: 600; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">Positioning</h2>
             </div>
-            <p style="color: #ddd; white-space: pre-line; line-height: 1.7; font-size: 0.9rem;">{{ result.positioning }}
-            </p>
+            <p style="color: #ccc; white-space: pre-line; line-height: 1.8; font-size: 0.88rem; margin: 0;">{{ result.positioning }}</p>
         </div>
 
     </div>
 
-    <!-- Risk Card (full width) -->
-    <div
-        style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-            <span style="font-size: 1.2rem;"></span>
-            <h2 style="font-size: 1.1rem; font-weight: 600; margin: 0;">Risk Analysis</h2>
+    <!-- Risk Card full width -->
+    <div style="background: #111; border: 1px solid #1f1f1f; border-left: 3px solid #ef4444; border-radius: 16px; padding: 1.5rem 1.75rem; margin-bottom: 2rem;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem;">
+            <span style="font-size: 1rem;">⚠️</span>
+            <h2 style="font-size: 0.85rem; font-weight: 600; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">Risk Analysis</h2>
         </div>
-        <p style="color: #ddd; white-space: pre-line; line-height: 1.7; font-size: 0.9rem;">{{ result.risk }}</p>
+        <p style="color: #ccc; white-space: pre-line; line-height: 1.8; font-size: 0.88rem; margin: 0;">{{ result.risk }}</p>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+        <a href="/" style="background: #7c3aed; color: #fff; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-size: 0.9rem; font-weight: 600;">
+            + Analyze another idea
+        </a>
+        <a href="/history/" style="background: #111; color: #aaa; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-size: 0.9rem; border: 1px solid #2a2a2a;">
+            View history
+        </a>
     </div>
 
     {% else %}
 
     <!-- Pending/Failed State -->
-    <div
-        style="background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px; padding: 3rem; text-align: center;">
-        <p style="color: #aaa; font-size: 1rem;">
+    <div style="background: #111; border: 1px solid #1f1f1f; border-radius: 16px; padding: 3rem; text-align: center;">
+        <p style="color: #555; font-size: 1rem;">
             {% if analysis.status == 'pending' or analysis.status == 'running' %}
-            Analysis is running... please wait and refresh the page.
+            ⏳ Analysis is running... please wait and refresh the page.
             {% else %}
-            Analysis failed. Please try again.
+            ❌ Analysis failed. Please try again.
             {% endif %}
         </p>
-        <a href="/" style="display: inline-block; margin-top: 1rem; color: #a78bfa; text-decoration: none;">← Try
-            again</a>
+        <a href="/" style="display: inline-block; margin-top: 1.5rem; color: #a78bfa; text-decoration: none; font-size: 0.9rem;">← Try again</a>
     </div>
 
     {% endif %}
